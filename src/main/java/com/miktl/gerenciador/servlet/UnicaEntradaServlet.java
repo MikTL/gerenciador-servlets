@@ -1,20 +1,16 @@
 package com.miktl.gerenciador.servlet;
 
+import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
+
+import com.miktl.gerenciador.accion.Accion;
+
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.io.IOException;
-
-import com.miktl.gerenciador.accion.Accion;
-import com.miktl.gerenciador.accion.EliminarEmpresa;
-import com.miktl.gerenciador.accion.ListaEmpresas;
-import com.miktl.gerenciador.accion.ModificarEmpresa;
-import com.miktl.gerenciador.accion.MostrarEmpresa;
-import com.miktl.gerenciador.accion.NuevaEmpresa;
-import com.miktl.gerenciador.accion.NuevaEmpresaForm;
 
 @WebServlet("/entrada")
 public class UnicaEntradaServlet extends HttpServlet {
@@ -24,40 +20,28 @@ public class UnicaEntradaServlet extends HttpServlet {
 		String paramAction = request.getParameter("accion");
 		String nombreClase="com.miktl.gerenciador.accion."+paramAction;
 		
-		String nombre;
+		String nombre=null;
 		try {
-			Class clase	= Class.forName(nombreClase);
-			Accion accion= (Accion)clase.newInstance();
+			Class<?> clase = Class.forName(nombreClase);
+			Accion accion = (Accion) clase.getDeclaredConstructor().newInstance();
 			nombre = accion.ejecutar(request, response);
 		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException | ServletException
 				| IOException e) {
 			// TODO Auto-generated catch block
 			throw new ServletException(e);
+		} catch (IllegalArgumentException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (InvocationTargetException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (NoSuchMethodException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SecurityException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
-		
-		/*
-		if(paramAction.equals("ListaEmpresas")) {
-			System.out.println("Listando empresas :V");
-			ListaEmpresas accion= new ListaEmpresas();
-			nombre=accion.ejecutar(request,response);
-		}else if(paramAction.equals("MostrarEmpresa")) {
-			MostrarEmpresa mostrarEmpresa= new MostrarEmpresa();
-			nombre= mostrarEmpresa.ejecutar(request, response);
-		}else if(paramAction.equals("EliminarEmpresa")) {
-			EliminarEmpresa empresa= new EliminarEmpresa();
-			nombre=empresa.ejecutar(request, response);
-		}else if(paramAction.equals("ModificarEmpresa")) {
-			ModificarEmpresa modificarEmpresa= new ModificarEmpresa();
-			nombre=modificarEmpresa.ejecutar(request, response);
-		}else if(paramAction.equals("NuevaEmpresa")) {
-			NuevaEmpresa nuevaEmpresa= new NuevaEmpresa();
-			nombre= nuevaEmpresa.ejecutar(request, response);
-		}else if(paramAction.equals("NuevaEmpresaForm")) {
-			NuevaEmpresaForm nuevaEmpresaForm= new NuevaEmpresaForm();
-			nombre= nuevaEmpresaForm.ejecutar(request, response);
-		}
-		*/
-		
 		String[] tipoYDireccion=nombre.split(":");
 		
 		if(tipoYDireccion[0].equals("forward")) {
@@ -66,9 +50,5 @@ public class UnicaEntradaServlet extends HttpServlet {
 		}else {
 			response.sendRedirect(tipoYDireccion[1]);
 		}
-		
-		
-		
 	}
-
 }
