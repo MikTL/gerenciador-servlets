@@ -8,6 +8,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+import com.miktl.gerenciador.accion.Accion;
 import com.miktl.gerenciador.accion.EliminarEmpresa;
 import com.miktl.gerenciador.accion.ListaEmpresas;
 import com.miktl.gerenciador.accion.ModificarEmpresa;
@@ -20,9 +21,21 @@ public class UnicaEntradaServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		String nombre= null;
 		String paramAction = request.getParameter("accion");
+		String nombreClase="com.miktl.gerenciador.accion."+paramAction;
 		
+		String nombre;
+		try {
+			Class clase	= Class.forName(nombreClase);
+			Accion accion= (Accion)clase.newInstance();
+			nombre = accion.ejecutar(request, response);
+		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException | ServletException
+				| IOException e) {
+			// TODO Auto-generated catch block
+			throw new ServletException(e);
+		}
+		
+		/*
 		if(paramAction.equals("ListaEmpresas")) {
 			System.out.println("Listando empresas :V");
 			ListaEmpresas accion= new ListaEmpresas();
@@ -43,7 +56,7 @@ public class UnicaEntradaServlet extends HttpServlet {
 			NuevaEmpresaForm nuevaEmpresaForm= new NuevaEmpresaForm();
 			nombre= nuevaEmpresaForm.ejecutar(request, response);
 		}
-		
+		*/
 		
 		String[] tipoYDireccion=nombre.split(":");
 		
