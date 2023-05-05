@@ -46,5 +46,13 @@ public class DB {
 			}
 		}
 		return null;
+	}
+	public Usuarios existeUsuario(String paramUsername, String paramContrasena) {
+		for (Usuarios usuario : listaUsuarios) {
+			if(usuario.validarUsuario(paramUsername, paramContrasena)) {
+				return usuario;
+			}
+		}
+		return null;
 	}	
 }
