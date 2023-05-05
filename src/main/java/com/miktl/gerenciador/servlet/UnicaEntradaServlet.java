@@ -42,6 +42,7 @@ public class UnicaEntradaServlet extends HttpServlet {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
 		String[] tipoYDireccion=nombre.split(":");
 		
 		if(tipoYDireccion[0].equals("forward")) {

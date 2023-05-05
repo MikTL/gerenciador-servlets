@@ -6,6 +6,7 @@ import java.util.List;
 
 public class DB {
 	private static List<Empresa> listaEmpresas= new ArrayList<>();	
+	private static List<Usuarios> listaUsuarios= new ArrayList<>();	
 	private static Integer llaverSecuencial= 1;
 	static {
 		Empresa empresa= new Empresa();
@@ -16,6 +17,11 @@ public class DB {
 		empresa2.setNombre("Claro");
 		listaEmpresas.add(empresa);
 		listaEmpresas.add(empresa2);
+		
+		Usuarios u1= new Usuarios("admin","admin123");
+		Usuarios u2= new Usuarios("miktl","mik123");
+		listaUsuarios.add(u1);
+		listaUsuarios.add(u2);
 	}
 	public void agregarEmpresa(Empresa empresa) {
 		empresa.setId(DB.llaverSecuencial);
