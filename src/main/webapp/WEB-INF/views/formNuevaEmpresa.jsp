@@ -9,6 +9,7 @@
     <title>Formulario</title>
 </head>
 <body>
+	<c:import url="logout-parcial.jsp"></c:import>
 	
     <form action="${linkServerNuevaEmpresa}" method="post">
     	<label for="nombre">Nombre de la empresa</label>

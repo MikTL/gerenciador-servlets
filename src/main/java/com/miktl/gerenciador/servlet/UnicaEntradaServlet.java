@@ -11,45 +11,60 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 
-@WebServlet("/entrada")
+@WebServlet(urlPatterns =  "/entrada")
 public class UnicaEntradaServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String paramAction = request.getParameter("accion");
-		String nombreClase="com.miktl.gerenciador.accion."+paramAction;
 		
-		String nombre=null;
-		try {
-			Class<?> clase = Class.forName(nombreClase);
-			Accion accion = (Accion) clase.getDeclaredConstructor().newInstance();
-			nombre = accion.ejecutar(request, response);
-		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException | ServletException
-				| IOException e) {
-			// TODO Auto-generated catch block
-			throw new ServletException(e);
-		} catch (IllegalArgumentException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (InvocationTargetException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (NoSuchMethodException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (SecurityException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		HttpSession session= request.getSession();
+		
+		boolean isInvalidUser = (session.getAttribute("loginUsuario")==null);
+		boolean isProtectedAction= !(paramAction.equals("Login")|| paramAction.equals("LoginForm"));
+		
+		if(isInvalidUser && isProtectedAction) {
+			System.out.println("User invalido");
+			response.sendRedirect("entrada?accion=LoginForm") ;
+			return;
 		}
-		
-		String[] tipoYDireccion=nombre.split(":");
-		
-		if(tipoYDireccion[0].equals("forward")) {
-			RequestDispatcher requestDispatcher= request.getRequestDispatcher("WEB-INF/views/"+tipoYDireccion[1]);
-			requestDispatcher.forward(request, response);
-		}else {
-			response.sendRedirect(tipoYDireccion[1]);
-		}
+			String nombreClase="com.miktl.gerenciador.accion."+paramAction;
+			
+			String nombre=null;
+			try {
+				Class<?> clase = Class.forName(nombreClase);
+				Accion accion = (Accion) clase.getDeclaredConstructor().newInstance();
+				nombre = accion.ejecutar(request, response);
+				
+				
+			} catch (ClassNotFoundException | InstantiationException | IllegalAccessException | ServletException
+					| IOException e) {
+				// TODO Auto-generated catch block
+				throw new ServletException(e);
+			} catch (IllegalArgumentException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (InvocationTargetException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (NoSuchMethodException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (SecurityException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			String[] tipoYDireccion=nombre.split(":");
+			
+			if(tipoYDireccion[0].equals("forward")) {
+				RequestDispatcher requestDispatcher= request.getRequestDispatcher("WEB-INF/views/"+tipoYDireccion[1]);
+				requestDispatcher.forward(request, response);
+			}else {
+				response.sendRedirect(tipoYDireccion[1]);
+			}
+			
 	}
 }

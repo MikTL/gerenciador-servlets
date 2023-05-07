@@ -12,7 +12,8 @@
     <title>Lista de Empresas</title>
 </head>
 	<body>
-		<h1>Este es un JSP que recibe datos de un servlet</h1>
+		<c:import url="logout-parcial.jsp"></c:import>
+		<h1> Usuario Logueado: ${loginUsuario.nombre} </h1>
 		<c:if test="${not empty Empresa }">
 			<p>Empresa <strong>${Empresa} </strong> registrada fecha: <fmt:formatDate value="${fechaApertura}" pattern="dd-MM-yyyy"/> </p>		
 		</c:if>

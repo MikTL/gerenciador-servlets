@@ -10,7 +10,7 @@
     <title>Modificar Empresa</title>
 </head>
 <body>
-	
+	<c:import url="logout-parcial.jsp"></c:import>
     <form action="${linkEntradaServlet}" method="post">
     	<label for="nombre">Nombre de la empresa</label>
     	<input type="text" id="nombre" name="nombre" value="${empresa.nombre }"/>

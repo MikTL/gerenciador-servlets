@@ -9,6 +9,7 @@
     <title>Empresa Registrada</title>
 </head>
 	<body>
+		<c:import url="logout-parcial.jsp"></c:import>
 		<h1>Este es un JSP que recibe datos de un servlet</h1>
 	    
 		     	<!-- Expression Language -->
