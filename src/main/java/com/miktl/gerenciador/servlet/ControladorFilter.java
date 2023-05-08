@@ -1,22 +1,28 @@
 package com.miktl.gerenciador.servlet;
 
+import jakarta.servlet.Filter;
+import jakarta.servlet.FilterChain;
+import jakarta.servlet.RequestDispatcher;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.ServletRequest;
+import jakarta.servlet.ServletResponse;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 
 import com.miktl.gerenciador.accion.Accion;
 
-import jakarta.servlet.RequestDispatcher;
-import jakarta.servlet.ServletException;
-import jakarta.servlet.http.HttpServlet;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
+//Comentamos la anotación para deficir el orden de los filtros a traves del xml
+//@WebFilter(urlPatterns = "/entrada")
+public class ControladorFilter implements Filter {
 
-// COmentamos la anotación porque estamos usando un filter en lugar de un servlet
-//@WebServlet(urlPatterns =  "/entrada")
-public class UnicaEntradaServlet extends HttpServlet {
-	private static final long serialVersionUID = 1L;
-
-	protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain chain) throws IOException, ServletException {
+		
+		System.out.println("Controlador Filter");
+		HttpServletRequest request= (HttpServletRequest) servletRequest;
+		HttpServletResponse response= (HttpServletResponse) servletResponse;
 		
 		String paramAction = request.getParameter("accion");
 		String nombreClase="com.miktl.gerenciador.accion."+paramAction;
@@ -26,6 +32,7 @@ public class UnicaEntradaServlet extends HttpServlet {
 			Class<?> clase = Class.forName(nombreClase);
 			Accion accion = (Accion) clase.getDeclaredConstructor().newInstance();
 			nombre = accion.ejecutar(request, response);
+			
 			
 		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException | ServletException
 				| IOException e) {
@@ -53,6 +60,5 @@ public class UnicaEntradaServlet extends HttpServlet {
 		}else {
 			response.sendRedirect(tipoYDireccion[1]);
 		}
-			
 	}
 }

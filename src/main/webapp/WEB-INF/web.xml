@@ -67,4 +67,35 @@
     <servlet-name>ModificarEmpresaServlet</servlet-name>
     <url-pattern>/modificarEmpresa</url-pattern>
   </servlet-mapping>
+  
+  <filter>
+    <display-name>MF</display-name>
+    <filter-name>MF</filter-name>
+    <filter-class>com.miktl.gerenciador.servlet.MonitoreoFilter</filter-class>
+  </filter>
+  <filter-mapping>
+    <filter-name>MF</filter-name>
+    <url-pattern>/entrada</url-pattern>
+  </filter-mapping>
+  
+  <filter>
+    <display-name>AutorizacionFilter</display-name>
+    <filter-name>AutorizacionFilter</filter-name>
+    <filter-class>com.miktl.gerenciador.servlet.AutorizacionFilter</filter-class>
+  </filter>
+  <filter-mapping>
+    <filter-name>AutorizacionFilter</filter-name>
+    <url-pattern>/entrada</url-pattern>
+  </filter-mapping>
+  
+  <filter>
+    <display-name>CF</display-name>
+    <filter-name>CF</filter-name>
+    <filter-class>com.miktl.gerenciador.servlet.ControladorFilter</filter-class>
+  </filter>
+  <filter-mapping>
+    <filter-name>CF</filter-name>
+    <url-pattern>/entrada</url-pattern>
+  </filter-mapping>
+ 
 </web-app>

@@ -7,13 +7,15 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.ServletRequest;
 import jakarta.servlet.ServletResponse;
-import jakarta.servlet.annotation.WebFilter;
-@WebFilter (urlPatterns = "/entrada")
+
+//Comentamos la anotación para deficir el orden de los filtros a traves del xml
+//@WebFilter (urlPatterns = "/entrada")
 public class MonitoreoFilter implements Filter{
 	@Override
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
 			throws IOException, ServletException {
-		// TODO Auto-generated method stub
+		
+		System.out.println("Monitoreo Filter");
 		long antes = System.currentTimeMillis();
 		String accion=request.getParameter("accion");
 		chain.doFilter(request, response);
